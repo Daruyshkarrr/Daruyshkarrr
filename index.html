@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Моё портфолио</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --bg: #fffdf9;
+        --text: #3a2a22;
+        --primary: #c97b63;
+        --primary-light: #fae8e0;
+        --primary-dark: #a85d3a;
+        --card-bg: #ffffff;
+        --border: #ead7c5;
+        --bg2: #fae8e0;
+      }
+
+      .dark-mode {
+        --bg: #2a1f1a;
+        --text: #f7ede6;
+        --primary: #e0a07c;
+        --primary-light: #3b2b24;
+        --primary-dark: #f0b08a;
+        --card-bg: #352720;
+        --border: #5b463a;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Шапка */
+      .header {
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border);
+        background-color: var(--bg);
+      }
+      .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      section {
+        background-color: var(--bg2);
+      }
+      .logo {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: var(--primary);
+      }
+      .nav a {
+        margin-left: 1rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav a:hover {
+        color: var(--primary-dark);
+      }
+
+      /* Кнопка темы — теплый акцент */
+      .theme-toggle {
+        background-color: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      .theme-toggle:hover {
+        background-color: var(--primary-dark);
+      }
+
+      /* Главный экран */
+      .hero {
+        padding: 5rem 0;
+        text-align: center;
+        background: linear-gradient(135deg, var(--primary-light), #f9eee3);
+      }
+      .hero h1 {
+        margin-bottom: 0.5rem;
+        color: var(--primary);
+      }
+      .hero p {
+        margin-bottom: 1.5rem;
+        color: var(--text);
+      }
+
+      /* Кнопки */
+      .btn {
+        display: inline-block;
+        background: var(--primary);
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .btn:hover {
+        background: var(--primary-dark);
+      }
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+      }
+      .btn-outline:hover {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      /* Блок "Обо мне" */
+      .about,
+      .contact,
+      .projects {
+        padding: 4rem 0;
+      }
+      .about {
+        background-color: var(--bg);
+      }
+
+      /* Сетка проектов */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+        margin-top: 1.25rem;
+      }
+
+      /* Карточка проекта */
+      .project-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.25rem;
+        box-shadow: 0 2px 8px rgba(201, 123, 99, 0.08);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s,
+          border-color 0.2s;
+      }
+      .project-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(201, 123, 99, 0.15);
+        border-color: var(--primary);
+      }
+      .project-card h3 {
+        margin-bottom: 0.5rem;
+        color: var(--primary-dark);
+        font-size: 1.1rem;
+      }
+      .project-card p {
+        color: var(--text);
+        opacity: 0.9;
+        font-size: 0.95rem;
+        min-height: 2.5rem;
+      }
+
+      /* Модальное окно формы */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(80, 50, 40, 0.4);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal {
+        background: var(--bg);
+        border-radius: 12px;
+        padding: 2rem 2rem 1.5rem 2rem;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--border);
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .modal-title {
+        margin: 0;
+        color: var(--primary);
+      }
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: var(--text);
+      }
+      .modal-close:hover {
+        color: var(--primary-dark);
+      }
+
+      #contactForm label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--primary-dark);
+      }
+      #contactForm input,
+      #contactForm textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background-color: var(--card-bg);
+        color: var(--text);
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+      #contactForm textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      /* Футер */
+      .footer {
+        padding: 1.5rem 0;
+        border-top: 1px solid var(--border);
+        background-color: var(--primary);
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--primary-light);
+      }
+
+      /* Адаптив */
+      @media (max-width: 768px) {
+        .nav {
+          display: none;
+        }
+        .projects-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+        .modal {
+          width: 95%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="logo">Моё портфолио</div>
+        <nav class="nav">
+          <a href="#about">Обо мне</a>
+          <a href="#projects">Проекты</a>
+          <a href="#contact">Контакты</a>
+        </nav>
+        <button
+          id="themeToggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Переключить тему"
+        >
+          🌙
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Главный экран -->
+      <section class="hero">
+        <div class="container">
+          <h1>Привет! Я — Маврина Дарья, ученица 10‑го класса.</h1>
+          <p>Тут вы узнаете, чем я занимаюсь в свободное время.</p>
+          <a href="#projects" class="btn">Смотреть проекты</a>
+        </div>
+      </section>
+
+      <!-- Обо мне -->
+      <section id="about" class="about">
+        <div class="container">
+          <h2 style="color: var(--primary)">Обо мне</h2>
+          <br />
+          <p>
+            Меня зовут Маврина Дарья, мне 16 лет, я из Пензенской области. Я
+            человек действия: мне важно не просто участвовать, а создавать,
+            развивать и приносить реальную пользу.
+            <br /><br />
+            Я активно реализую себя в общественной деятельности как участник
+            Российского движения детей и молодёжи «Движение Первых». Это
+            пространство возможностей, где я не упускаю ни одного шанса проявить
+            себя и получить новый опыт. Я принимала участие в таких значимых
+            мероприятиях, как региональный чемпионат по оказанию первой
+            медицинской помощи, военно‑патриотическая игра «Зарница 2.0» и
+            других проектах, которые научили меня работать в команде, быстро
+            принимать решения и брать на себя ответственность.
+            <br /><br />
+            Также я состою в движении «Юнармия», где активно участвую в
+            патриотических и социальных инициативах.
+            <br /><br />
+            Отдельное место в моей жизни занимает волонтёрство. На платформе
+            Добро.РФ у меня более 280 часов, но для меня это не просто цифра —
+            это ежедневная работа, направленная на помощь людям и развитие
+            общества. Я убеждена, что даже небольшие действия могут менять мир к
+            лучшему.
+            <br /><br />
+            В 10 классе я реализовала собственный проект — интерактивные
+            экскурсии для учащихся начальной школы. Его цель — сделать обучение
+            младших школьников более увлекательным и доступным через вовлечение,
+            игру и живое взаимодействие. Этот опыт стал для меня важным шагом в
+            развитии лидерских и организаторских навыков.
+            <br /><br />
+            Ранее важной частью моей жизни был спорт — я занималась волейболом,
+            что сформировало во мне выносливость, дисциплину и умение работать в
+            команде.
+            <br /><br />
+            Я также проявляю интерес к науке. В 2022 году я прошла обучение в
+            центре «Ключевский» на профильной смене «Образовательная биология».
+            Кроме того, я стала участником проекта Росатома «Ледокол знаний»,
+            где вошла в число 240 лучших участников со всей страны и дошла до
+            четвертьфинала.
+            <br /><br />
+            Моим главным творческим направлением является рисование. Это мой
+            способ самовыражения и внутреннего роста. Несмотря на отсутствие
+            художественного образования, я развиваюсь самостоятельно, участвую в
+            конкурсах и стремлюсь продвигать своё творчество.
+            <br /><br />
+            Я не останавливаюсь на достигнутом: для меня важно постоянно
+            развиваться, пробовать новое и не бояться брать на себя
+            ответственность. Я готова не только идти вперёд сама, но и помогать
+            другим раскрывать их потенциал.
+          </p>
+        </div>
+      </section>
+
+      <!-- Проекты -->
+      <section id="projects" class="projects">
+        <div class="container">
+          <h2 style="color: var(--primary)">Проекты</h2>
+          <div id="projectsGrid" class="projects-grid"></div>
+          <button
+            id="loadMore"
+            class="btn load-more"
+            style="margin-top: 1.5rem"
+          >
+            Показать ещё
+          </button>
+        </div>
+      </section>
+
+      <!-- Кнопка для формы -->
+      <section id="contact" class="contact">
+        <div class="container" style="text-align: center">
+          <h2 style="color: var(--primary)">Связаться со мной</h2>
+          <br />
+          <p>
+            Напишите мне, если хотите узнать больше о проектах или предложить
+            сотрудничество.
+          </p>
+          <br />
+          <button id="openModalBtn" class="btn">Открыть форму</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2026 Моё портфолио. Все права защищены.</p>
+      </div>
+    </footer>
+
+    <!-- Модальное окно формы -->
+    <div id="modalOverlay" class="modal-overlay" style="display: none">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Связаться со мной</h3>
+          <button id="modalClose" class="modal-close" type="button">
+            &times;
+          </button>
+        </div>
+
+        <form id="contactForm">
+          <label>
+            Имя
+            <input type="text" name="name" required />
+          </label>
+
+          <label>
+            Email
+            <input type="email" name="email" required />
+          </label>
+
+          <label>
+            Сообщение
+            <textarea name="message" required></textarea>
+          </label>
+
+          <button type="submit" class="btn">Отправить</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Список проектов
+      const projects = [
+        {
+          title:
+            "Интерактивные экскурсии по редким растениям Малосердобинского района",
+          desc: "Игровые карточки, сценарий и проведённые экскурсии для младших школьников.",
+        },
+        {
+          title: "Киносайт с афишей",
+          desc: "Лендинг с карточками фильмов и расписанием.",
+        },
+        {
+          title: "Новости кино",
+          desc: "Небольшой сбор новостей из мира кинематографа.",
+        },
+        {
+          title: "Личный блог",
+          desc: "Немного обо мне и моей жизни.",
+        },
+      ];
+
+      let visibleProjects = projects.slice(0, 3);
+
+      // Тема (светлая / тёмная)
+      const themeToggle = document.getElementById("themeToggle");
+      const body = document.body;
+
+      // Загрузка темы из localStorage
+      if (localStorage.getItem("theme") === "dark") {
+        body.classList.add("dark-mode");
+        themeToggle.textContent = "☀️";
+      }
+
+      // Переключение темы
+      themeToggle.addEventListener("click", () => {
+        body.classList.toggle("dark-mode");
+        if (body.classList.contains("dark-mode")) {
+          localStorage.setItem("theme", "dark");
+          themeToggle.textContent = "☀️";
+        } else {
+          localStorage.setItem("theme", "light");
+          themeToggle.textContent = "🌙";
+        }
+      });
+
+      // Функция отрисовки карточек
+      function renderProjects() {
+        const container = document.getElementById("projectsGrid");
+        container.innerHTML = visibleProjects
+          .map(
+            (p) => `
+          <div class="project-card">
+            <h3>${p.title}</h3>
+            <p>${p.desc}</p>
+          </div>`,
+          )
+          .join("");
+      }
+
+      // Кнопка "Показать ещё"
+      document.getElementById("loadMore").addEventListener("click", () => {
+        const nextIndex = visibleProjects.length;
+        const more = projects.slice(nextIndex, nextIndex + 3);
+        if (more.length > 0) {
+          visibleProjects = visibleProjects.concat(more);
+          renderProjects();
+        } else {
+          document.getElementById("loadMore").style.display = "none";
+        }
+      });
+
+      // Модальное окно
+      const modal = document.getElementById("modalOverlay");
+      const openBtn = document.getElementById("openModalBtn");
+      const closeBtn = document.getElementById("modalClose");
+
+      openBtn.addEventListener("click", () => {
+        modal.style.display = "flex";
+      });
+
+      closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+
+      // Закрытие по клику на тёмный фон
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+
+      // Отправка формы из модалки
+      document.getElementById("contactForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const obj = {};
+        for (let [key, value] of formData.entries()) {
+          obj[key] = value;
+        }
+
+        // Валидация email
+        const email = obj.email;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert("Введите корректный email.");
+          return;
+        }
+
+        console.log("Данные формы:", obj);
+        alert("Сообщение отправлено! Проверьте консоль (F12 → Console).");
+        modal.style.display = "none"; // закрываем окно
+      });
+
+      // Отрисовка карточек при загрузке
+      renderProjects();
+    </script>
+  </body>
+</html>
